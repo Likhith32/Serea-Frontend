@@ -92,6 +92,13 @@ export default function Home() {
   
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Pre-warm backend on mount (especially useful for Render's free tier sleep)
+  useEffect(() => {
+    fetch(`${API_BASE}/`).catch((err) => {
+      console.log("Pre-warming backend ping failed or is waking up:", err);
+    });
+  }, []);
+
   // Clean up PDF URL on unmount
   useEffect(() => {
     return () => {
